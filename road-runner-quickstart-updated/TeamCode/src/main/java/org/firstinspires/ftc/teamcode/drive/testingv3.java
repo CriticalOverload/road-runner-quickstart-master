@@ -9,23 +9,23 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "testing")
-public class testing extends LinearOpMode {
-    private DcMotor leftEncoder, rightEncoder, middleEncoder;
+@TeleOp(name = "testingv3")
+public class testingv3 extends LinearOpMode {
+    private DcMotor parallelEncoder, perpendicularEncoder;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
-        leftEncoder = hardwareMap.dcMotor.get("leftEncoder");
-        rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
-        middleEncoder = hardwareMap.dcMotor.get("frontEncoder");
+        parallelEncoder = hardwareMap.dcMotor.get("parallelEncoder");
+        perpendicularEncoder = hardwareMap.dcMotor.get("perpendicularEncoder");
 
 
         waitForStart();
+        parallelEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        perpendicularEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         while(opModeIsActive()){
-            telemetry.addData("left", leftEncoder.getCurrentPosition());
-            telemetry.addData("right", rightEncoder.getCurrentPosition());
-            telemetry.addData("front", middleEncoder.getCurrentPosition());
+            telemetry.addData("parallel", parallelEncoder.getCurrentPosition());
+            telemetry.addData("perpendicular", perpendicularEncoder.getCurrentPosition());
             telemetry.update();
         }
 
