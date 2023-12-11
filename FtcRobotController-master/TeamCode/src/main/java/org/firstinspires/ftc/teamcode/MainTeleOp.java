@@ -10,12 +10,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name = "AA Main TeleOp")
 public class MainTeleOp extends LinearOpMode {
-    private DcMotor motorFrontRight, motorFrontLeft, motorBackLeft, motorBackRight, motorLS;
+    private DcMotor motorFrontRight, motorFrontLeft, motorBackLeft, motorBackRight, motorLS, motorLinearAccuator, motorLinearAccuatorJoint;
     //private DistanceSensor distSensor;
-    private Servo servo, jointServo;
+    private Servo servo, jointServo, clawServo;
     private double powerMod = 0.8;
     private double slidePMod = 1.0;
     private double value = 1;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -23,12 +24,16 @@ public class MainTeleOp extends LinearOpMode {
         motorFrontLeft = hardwareMap.dcMotor.get("FL");
         motorBackLeft = hardwareMap.dcMotor.get("BL");
         motorBackRight = hardwareMap.dcMotor.get("BR");
+        clawServo = hardwareMap.servo.get("claw");
         jointServo = hardwareMap.servo.get("JS");
-        //servo = hardwareMap.servo.get("claw");
         motorLS = hardwareMap.dcMotor.get("LS");
+        motorLinearAccuator = hardwareMap.dcMotor.get("MLA");
+        motorLinearAccuatorJoint = hardwareMap.dcMotor.get("MLAJ");
+
+
         //distSensor = hardwareMap.get(DistanceSensor.class, "distSensor");
 
-        jointServo.setPosition(0);
+        //jointServo.setPosition(0);
 
         //robot class?????????????????????????????
 
@@ -41,6 +46,8 @@ public class MainTeleOp extends LinearOpMode {
         motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorLS.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorLinearAccuatorJoint.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorLinearAccuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         waitForStart();
@@ -85,23 +92,44 @@ public class MainTeleOp extends LinearOpMode {
             motorBackLeft.setPower((powerTwo - (rotation))*powerMod);
             motorBackRight.setPower((powerOne + (rotation))*powerMod);
             motorLS.setPower(gamepad2.right_stick_y * slidePMod);
+            motorLinearAccuatorJoint.setPower(gamepad2.left_stick_y * 0.3);
+            motorLinearAccuator.setPower(gamepad2.right_stick_x*0.9);
+            //moves linear accuator up and down
+//            if (gamepad2.right_trigger || ) {
+//                motorLinearAccuator.setPower(0.4);
+//            }
+//            else if (gamepad2.dpad_left){
+//                motorLinearAccuator.setPower(-0.3);
+//            }
+//            else {
+//                motorLinearAccuator.setPower(0);
+//
+//            }
 
 
             //Joint Servo code
-            if (gamepad2.dpad_up) {
-                jointServo.setPosition(0.0);
+            if (gamepad2.y) {
+                clawServo.setPosition(0.6);
             }
-            else if (gamepad2.dpad_down) {
-                jointServo.setPosition(1.0);
+            else if (gamepad2.a) {
+                clawServo.setPosition(0.2);
             }
 
-            //CODE FOR CLAW WHEN WIRED IN
-            /*if (gamepad2.a) {
-                claw.setPosition(0.0);
+            //claw servo
+            if (gamepad2.right_bumper){
+                jointServo.setPosition(0.5);
             }
-            else if (gamepad2.y) {
-                claw.setPosition(0.5);
-            }*/
+            else if (gamepad2.left_bumper){
+                jointServo.setPosition(0.0);
+            }
+
+//            //CODE FOR CLAW WHEN WIRED IN
+//            if (gamepad2.a) {
+//                claw.setPosition(0.0);
+//            }
+//            else if (gamepad2.y) {
+//                claw.setPosition(0.5);
+//            }
             telemetry.addData("Slide position",motorLS.getCurrentPosition());
             telemetry.update();
 
@@ -110,4 +138,5 @@ public class MainTeleOp extends LinearOpMode {
 
 
     }
+
 }

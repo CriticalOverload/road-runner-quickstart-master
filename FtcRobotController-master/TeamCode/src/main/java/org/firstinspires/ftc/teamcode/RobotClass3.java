@@ -10,14 +10,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
@@ -83,7 +81,7 @@ public class RobotClass3 {
      * @param opMode From the opMode we get telemetry
      * @param yesDash if we're using the dashboard
      * */
-    public RobotClass3(DcMotor motorFL,DcMotor motorFR,DcMotor motorBL,DcMotor motorBR, BNO055IMU imu, LinearOpMode opMode, boolean yesDash){
+    public RobotClass3(DcMotor motorFL, DcMotor motorFR, DcMotor motorBL, DcMotor motorBR, BNO055IMU imu, LinearOpMode opMode, boolean yesDash){
         this.motorFL = motorFL;
         this.motorFR = motorFR;
         this.motorBL = motorBL;
@@ -188,6 +186,51 @@ public class RobotClass3 {
         telemetry.addData("Current Angle", angles.firstAngle);
         telemetry.addData("Global Angle", globalAngle);
     }
+    public void moveSlides(char level, double power){
+        double circumference = 4.409;//circumference of pulley for hub
+//        double groundRN = ; // rotations needed to reach point from 0
+//        double smallRN =;
+        double medRN =26/circumference;
+        double highEP =37/circumference;// (inches from ground / circumference)* ticks
+
+        //setup this with pid stuff
+        int target;
+        switch(level){//todo!!!!!!!!!!!!!!!!!!!!!
+            default:
+            case 'd'://down, pick up position
+            case 'm'://medium
+            case 'l'://low
+                //pick up
+                target = -389;
+                break;
+            case 'h'://high
+                target = -4400; //-4052
+                break;
+            case 'c'://right before pick up from cone stack
+                //ground
+                target = -1170;
+                break;
+            case 'f'://first cone pick up
+                target = -690;
+                break;
+            case 's':
+                target = -594;
+                break;
+            case 'r':
+                target = -459;
+                break;
+        }
+        if(motorLS.getCurrentPosition() < target) {
+            motorLS.setPower(power);
+        }
+        else{
+            motorLS.setPower(-power);
+        }
+        motorLS.setTargetPosition(target);
+        while((!stopButton.isPressed())&&(Math.abs(motorLS.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
+        motorLS.setPower(0);
+
+    }
     public void gyroTurn(int degrees, double power) throws InterruptedException{
         //restart angle tracking
         resetAngle();
@@ -278,7 +321,6 @@ public class RobotClass3 {
 
         //convert direction (degrees) into radians
         double newDirection = angle * Math.PI/180 - Math.PI/4;
-
         //calculate powers needed using direction
         double leftPower = Math.cos(newDirection) * power;
         double rightPower = Math.sin(newDirection) * power;
