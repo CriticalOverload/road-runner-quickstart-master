@@ -197,27 +197,11 @@ public class RobotClass3 {
         int target;
         switch(level){//todo!!!!!!!!!!!!!!!!!!!!!
             default:
-            case 'd'://down, pick up position
-            case 'm'://medium
-            case 'l'://low
-                //pick up
-                target = -389;
+            case 'u':
+                target = 0;
                 break;
-            case 'h'://high
-                target = -4400; //-4052
-                break;
-            case 'c'://right before pick up from cone stack
-                //ground
-                target = -1170;
-                break;
-            case 'f'://first cone pick up
-                target = -690;
-                break;
-            case 's':
-                target = -594;
-                break;
-            case 'r':
-                target = -459;
+            case 'd':
+                target = 10;
                 break;
         }
         if(motorLS.getCurrentPosition() < target) {

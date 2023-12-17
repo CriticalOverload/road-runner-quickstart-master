@@ -32,12 +32,12 @@ public class BlueLeft extends LinearOpMode {
         motorBR = hardwareMap.dcMotor.get("BR");
         motorFL = hardwareMap.dcMotor.get("FL");
         motorBL = hardwareMap.dcMotor.get("BL");
-        //slides = hardwareMap.dcMotor.get("LS");
+        slides = hardwareMap.dcMotor.get("LS");
         // signal = 2;
 
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-
+        
         robot = new RobotClass3(motorFL, motorFR, motorBL, motorBR, imu, this, false);
         robot.setupRobot();
 
@@ -46,17 +46,18 @@ public class BlueLeft extends LinearOpMode {
             telemetry.update();
         }
         waitForStart();
-        //if webcam on the back, then start facing the back. orientation of initial robot only matters up till #2
-        //1. read signal
-        //todo: test and update
-        //also roadrunner...
+       
 
+
+        //if cone is in the middle
         if (signal == 2){
             robot.gyroStrafeEncoder(0.6,90,24);
             robot.gyroTurn(90,0.6);
             robot.gyroStrafeEncoder(0.6,97,24);
 
         }
+
+        //if cone is in the left
         else if (signal == 1) {
             robot.gyroStrafeEncoder(0.6, 90, 5);
             robot.gyroTurn(90, 0.6);
@@ -64,6 +65,8 @@ public class BlueLeft extends LinearOpMode {
             robot.gyroStrafeEncoder(0.6, 90,24);
 
         }
+
+        //if cone is in the right
         else if (signal  == 3){
             robot.gyroStrafeEncoder(0.7, 90, 5);
             robot.gyroTurn(-70, 0.7);

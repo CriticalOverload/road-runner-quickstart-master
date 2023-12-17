@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class MainTeleOp extends LinearOpMode {
     private DcMotor motorFrontRight, motorFrontLeft, motorBackLeft, motorBackRight, motorLS, motorLinearAccuator, motorLinearAccuatorJoint;
     //private DistanceSensor distSensor;
-    private Servo servo, jointServo, clawServo;
+    private Servo servo, jointServo, clawServo, rocketLauncher;
     private double powerMod = 0.8;
     private double slidePMod = 1.0;
     private double value = 1;
@@ -29,6 +29,7 @@ public class MainTeleOp extends LinearOpMode {
         motorLS = hardwareMap.dcMotor.get("LS");
         motorLinearAccuator = hardwareMap.dcMotor.get("MLA");
         motorLinearAccuatorJoint = hardwareMap.dcMotor.get("MLAJ");
+        rocketLauncher = hardwareMap.servo.get("paper");
 
 
         //distSensor = hardwareMap.get(DistanceSensor.class, "distSensor");
@@ -87,6 +88,8 @@ public class MainTeleOp extends LinearOpMode {
 //            double powerOne = r*Math.cos(angle);
 //            double powerTwo = r*Math.sin(angle);
 
+
+
             motorFrontLeft.setPower((powerOne - (rotation))*powerMod);
             motorFrontRight.setPower((powerTwo + (rotation))*powerMod);
             motorBackLeft.setPower((powerTwo - (rotation))*powerMod);
@@ -105,21 +108,23 @@ public class MainTeleOp extends LinearOpMode {
 //                motorLinearAccuator.setPower(0);
 //
 //            }
-
+            if (gamepad2.left_trigger>0){
+                rocketLauncher.setPosition(0.0);
+            }
 
             //Joint Servo code
             if (gamepad2.y) {
-                clawServo.setPosition(0.6);
+                clawServo.setPosition(0.3);
             }
             else if (gamepad2.a) {
-                clawServo.setPosition(0.2);
+                clawServo.setPosition(0.0);
             }
 
             //claw servo
-            if (gamepad2.right_bumper){
+            if (gamepad2.dpad_up){
                 jointServo.setPosition(0.5);
             }
-            else if (gamepad2.left_bumper){
+            else if (gamepad2.dpad_down){
                 jointServo.setPosition(0.0);
             }
 
@@ -130,7 +135,7 @@ public class MainTeleOp extends LinearOpMode {
 //            else if (gamepad2.y) {
 //                claw.setPosition(0.5);
 //            }
-            telemetry.addData("Slide position",motorLS.getCurrentPosition());
+            telemetry.addData("Slide position", motorLS.getCurrentPosition());
             telemetry.update();
 
 
