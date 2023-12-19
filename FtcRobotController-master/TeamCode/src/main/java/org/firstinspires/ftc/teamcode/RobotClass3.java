@@ -198,10 +198,10 @@ public class RobotClass3 {
         switch(level){//todo!!!!!!!!!!!!!!!!!!!!!
             default:
             case 'u':
-                target = 0;
+                target = -8927;
                 break;
             case 'd':
-                target = 10;
+                target = 0;
                 break;
         }
         if(motorLS.getCurrentPosition() < target) {

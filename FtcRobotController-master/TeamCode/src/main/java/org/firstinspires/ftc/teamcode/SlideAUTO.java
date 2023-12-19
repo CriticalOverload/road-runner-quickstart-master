@@ -15,7 +15,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name="BlueLeft")
+@Autonomous(name="SlideAUTOt")
 public class SlideAUTO extends LinearOpMode {
     private DcMotor motorFrontRight, motorFrontLeft, motorBackLeft, motorBackRight;
     private DcMotor motorLS;
