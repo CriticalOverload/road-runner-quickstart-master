@@ -87,17 +87,23 @@ public class BlueLeft extends LinearOpMode {
         }
         waitForStart();
        signal = mainPipeline.getSignal();
-
+       
+        //robot.gyroStrafeEncoder(0.6, 180, 5);
+        signal = 1;
         //if cone is in the middle
         if (signal == 2){
-            robot.gyroStrafeEncoder(0.6,90,12);
-//            robot.gyroTurn(90,0.6);
-//            robot.gyroStrafeEncoder(0.6,97,24);
+            robot.gyroStrafeEncoder(0.6,90,24);
+            robot.gyroTurn(90,0.6);
+            robot.gyroStrafeEncoder(0.6,97,24);
 
         }
         //if cone is in the left
         else if (signal == 1) {
-            robot.gyroStrafeEncoder(0.6, 180, 5);
+            robot.gyroStrafeEncoder(0.4, 75, 26);
+            robot.gyroTurn(90, 0.4);
+
+
+            robot.gyroStrafeEncoder(0.4, 90, 72);
 //            robot.gyroTurn(90, 0.6);
 //            robot.gyroStrafeEncoder(0.6, 0, 19);
 //            robot.gyroStrafeEncoder(0.6, 90,24);
@@ -106,7 +112,11 @@ public class BlueLeft extends LinearOpMode {
 
         //if cone is in the right
         else if (signal  == 3){
-            robot.gyroStrafeEncoder(0.7, 0, 5);
+              robot.gyroStrafeEncoder(0.6,90,24);
+              robot.gyroTurn(-90, 0.7);
+              robot.gyroTurn(180, 0.4);
+              robot.gyroStrafeEncoder(0.4, 90, 72);
+//            robot.gyroStrafeEncoder(0.7, 0, 5);
 //            robot.gyroTurn(-70, 0.7);
 //            robot.gyroStrafeEncoder(0.5, 180, 19);
 //            robot.gyroTurn(160, 0.7);
