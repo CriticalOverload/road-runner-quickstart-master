@@ -69,8 +69,8 @@ public class BaseTeleOp extends LinearOpMode {
 
             motorFrontLeft.setPower((powerOne - (rotation))*powerMod);
             motorFrontRight.setPower((powerTwo + (rotation))*powerMod);
-            motorBackLeft.setPower((powerTwo - (rotation))*powerMod);
-            motorBackRight.setPower((powerOne + (rotation))*powerMod);
+            motorBackLeft.setPower((powerTwo - (rotation))*(powerMod- 0.1));
+            motorBackRight.setPower((powerOne + (rotation))*(powerMod-0.1));
 
             //moves linear accuator up and down
 //            if (gamepad2.right_trigger || ) {

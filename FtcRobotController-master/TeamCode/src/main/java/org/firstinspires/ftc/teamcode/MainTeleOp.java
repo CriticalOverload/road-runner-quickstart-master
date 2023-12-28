@@ -42,7 +42,6 @@ public class MainTeleOp extends LinearOpMode {
 
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
-        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -60,7 +59,7 @@ public class MainTeleOp extends LinearOpMode {
 
             //Slows down or speeds up motors for wheels
             if(gamepad1.right_bumper) {
-                powerMod = 0.5;
+                powerMod = 0.9;
                 telemetry.addData("right bumper","gamepad1");
             }else if(gamepad1.left_bumper){
                 telemetry.addData("left bumper","gamepad1");
@@ -71,13 +70,13 @@ public class MainTeleOp extends LinearOpMode {
 
             //slows down or speeds up motors for linear slide.
             if(gamepad2.right_bumper) {
-                slidePMod = 0.85;
+                slidePMod = 0.9;
                 telemetry.addData("right bumper","gamepad2");
             }else if(gamepad2.left_bumper){
-                slidePMod = 0.35;
+                slidePMod = 0.45;
                 telemetry.addData("left bumper","gamepad2");
             }else{
-                slidePMod = 0.8;
+                slidePMod = 0.7;
             }
 
             double angle = Math.atan2(gamepad1.right_stick_y, gamepad1.right_stick_x) - (Math.PI/4);
@@ -91,11 +90,11 @@ public class MainTeleOp extends LinearOpMode {
 
             motorFrontLeft.setPower((powerOne - (rotation))*powerMod);
             motorFrontRight.setPower((powerTwo + (rotation))*powerMod);
-            motorBackLeft.setPower((powerTwo - (rotation))*powerMod);
-            motorBackRight.setPower((powerOne + (rotation))*powerMod);
+            motorBackLeft.setPower((powerTwo - (rotation))*(powerMod-0.15));
+            motorBackRight.setPower((powerOne + (rotation))*(powerMod - 0.15));
             motorLS.setPower(gamepad2.right_stick_y * slidePMod);
             motorLinearAccuatorJoint.setPower(gamepad2.left_stick_y * 0.3);
-            motorLinearAccuator.setPower(gamepad2.left_stick_x*0.9);
+            motorLinearAccuator.setPower(gamepad2.left_stick_x*-0.9);
             //moves linear accuator up and down
 //            if (gamepad2.right_trigger || ) {
 //                motorLinearAccuator.setPower(0.4);
@@ -110,43 +109,34 @@ public class MainTeleOp extends LinearOpMode {
 
 
             //claw Servo code
-            if (gamepad2.x) {
-                telemetry.addLine("x");
-
-                clawServo.setPosition(0.5);
-            }
-            else if (gamepad2.b) {
+            if (gamepad2.b) {
                 telemetry.addLine("b");
 
-                clawServo.setPosition(0.2);
+                clawServo.setPosition(0.7);
+            }
+            else if (gamepad2.x) {
+                telemetry.addLine("x");
+
+                clawServo.setPosition(0.35);
             }
 
 
             //joint servo
-            if (gamepad2.dpad_up){
-                telemetry.addLine("dpad up");
-                //jointServo.setPosition(0.7);
-                jointServoPosition += 0.01;
-                if (jointServoPosition > 0.7){
-                    jointServoPosition = 0.7;
-                }
+            if (gamepad2.y){
+                jointServo.setPosition(0.4);
+
 
             }
-            else if (gamepad2.dpad_down){
-                telemetry.addLine("dpad down");
-//                jointServo.setPosition(0.1);
-                jointServoPosition -= 0.01;
-                if (jointServoPosition < 0.1){
-                    jointServoPosition = 0.1;
-                }
+            else if (gamepad2.a){
+                jointServo.setPosition(0.1);
+
             }
-            jointServo.setPosition(jointServoPosition);
             //CODE FOR ROCKET LAUNCHER
             if (gamepad2.right_trigger >0 ) {
                 rocket.setPosition(0.3);
             }
             else if (gamepad2.left_trigger >0) {
-                rocket.setPosition(0.6);
+                rocket.setPosition(0.7);
             }
             telemetry.addData("Slide position",motorLS.getCurrentPosition());
             telemetry.update();

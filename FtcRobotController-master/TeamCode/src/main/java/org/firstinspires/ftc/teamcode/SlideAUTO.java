@@ -56,10 +56,10 @@ public class SlideAUTO extends LinearOpMode {
         //todo: test and update
         //also roadrunner...
 
-        robot.moveSlides('u', 0.6);
-        jointServo.setPosition(0.5);
-        clawServo.setPosition(0.3);
-        robot.moveSlides('d', 0.5);
+//        robot.moveSlides('u', 0.6);
+//        jointServo.setPosition(0.5);
+//        clawServo.setPosition(0.3);
+//        robot.moveSlides('d', 0.5);
 
 
 

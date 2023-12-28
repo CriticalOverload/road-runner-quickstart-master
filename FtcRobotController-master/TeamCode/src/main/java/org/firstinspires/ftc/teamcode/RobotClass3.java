@@ -92,6 +92,18 @@ public class RobotClass3 {
         motors = new DcMotor[]{this.motorFL, this.motorBR, this.motorBL, this.motorFR};
         this.yesDash = yesDash;
     }
+    public RobotClass3(DcMotor motorFL, DcMotor motorFR, DcMotor motorBL, DcMotor motorBR, DcMotor motorLS, BNO055IMU imu, LinearOpMode opMode, boolean yesDash){
+        this.motorFL = motorFL;
+        this.motorFR = motorFR;
+        this.motorBL = motorBL;
+        this.motorBR = motorBR;
+        this.motorLS = motorLS;
+        this.imu = imu;
+        this.opMode = opMode;
+        this.telemetry = opMode.telemetry;
+        motors = new DcMotor[]{this.motorFL, this.motorBR, this.motorBL, this.motorFR};
+        this.yesDash = yesDash;
+    }
     public void setupRobot() throws InterruptedException{
         reverseMotors();
         for(DcMotor m : motors){
@@ -153,8 +165,9 @@ public class RobotClass3 {
     public void reverseMotors() throws InterruptedException{
         //reverse needed motors here!!
         motorBL.setDirection(DcMotor.Direction.REVERSE);
-        motorFR.setDirection(DcMotor.Direction.REVERSE);
+        //motorFR.setDirection(DcMotor.Direction.REVERSE);
         motorFL.setDirection(DcMotor.Direction.REVERSE);
+        motorBL.setDirection(DcMotor.Direction.REVERSE);
     }
     public void resetEncoders(){
         for(DcMotor m : motors) {
@@ -186,7 +199,7 @@ public class RobotClass3 {
         telemetry.addData("Current Angle", angles.firstAngle);
         telemetry.addData("Global Angle", globalAngle);
     }
-    public void moveSlides(char level, double power){
+    public void moveSlides(String level, double power){
         double circumference = 4.409;//circumference of pulley for hub
 //        double groundRN = ; // rotations needed to reach point from 0
 //        double smallRN =;
@@ -197,11 +210,14 @@ public class RobotClass3 {
         int target;
         switch(level){//todo!!!!!!!!!!!!!!!!!!!!!
             default:
-            case 'u':
-                target = -8927;
+            case "backboard":
+                target = -1990;
                 break;
-            case 'd':
-                target = 0;
+            case "move":
+                target = -100;
+                break;
+            case "zone":
+                target = -230;
                 break;
         }
         if(motorLS.getCurrentPosition() < target) {
@@ -211,8 +227,12 @@ public class RobotClass3 {
             motorLS.setPower(-power);
         }
         motorLS.setTargetPosition(target);
-        while((!stopButton.isPressed())&&(Math.abs(motorLS.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
+        //while((!stopButton.isPressed())&&(Math.abs(motorLS.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
+        while((Math.abs(motorLS.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
         motorLS.setPower(0);
+
+
+
 
     }
     public void gyroTurn(int degrees, double power) throws InterruptedException{
