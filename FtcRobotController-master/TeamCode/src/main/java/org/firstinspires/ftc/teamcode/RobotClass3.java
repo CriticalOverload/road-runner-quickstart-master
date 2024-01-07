@@ -217,7 +217,7 @@ public class RobotClass3 {
                 target = -100;
                 break;
             case "zone":
-                target = -230;
+                target = -270;
                 break;
         }
         if(motorLS.getCurrentPosition() < target) {

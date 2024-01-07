@@ -59,13 +59,13 @@ public class MainTeleOp extends LinearOpMode {
 
             //Slows down or speeds up motors for wheels
             if(gamepad1.right_bumper) {
-                powerMod = 0.9;
+                powerMod = 1.0;
                 telemetry.addData("right bumper","gamepad1");
             }else if(gamepad1.left_bumper){
                 telemetry.addData("left bumper","gamepad1");
-                powerMod = 0.3;
+                powerMod = 0.6;
             }else{
-                powerMod = 0.9;
+                powerMod = 0.8;
             }
 
             //slows down or speeds up motors for linear slide.
@@ -90,11 +90,11 @@ public class MainTeleOp extends LinearOpMode {
 
             motorFrontLeft.setPower((powerOne - (rotation))*powerMod);
             motorFrontRight.setPower((powerTwo + (rotation))*powerMod);
-            motorBackLeft.setPower((powerTwo - (rotation))*(powerMod-0.15));
-            motorBackRight.setPower((powerOne + (rotation))*(powerMod - 0.15));
+            motorBackLeft.setPower((powerTwo - (rotation))*(powerMod));
+            motorBackRight.setPower((powerOne + (rotation))*(powerMod ));
             motorLS.setPower(gamepad2.right_stick_y * slidePMod);
-            motorLinearAccuatorJoint.setPower(gamepad2.left_stick_y * 0.3);
-            motorLinearAccuator.setPower(gamepad2.left_stick_x*-0.9);
+            motorLinearAccuatorJoint.setPower(gamepad2.left_stick_y*0.3);
+            motorLinearAccuator.setPower(gamepad2.left_stick_x*-1.0);
             //moves linear accuator up and down
 //            if (gamepad2.right_trigger || ) {
 //                motorLinearAccuator.setPower(0.4);
@@ -117,7 +117,7 @@ public class MainTeleOp extends LinearOpMode {
             else if (gamepad2.x) {
                 telemetry.addLine("x");
 
-                clawServo.setPosition(0.35);
+                clawServo.setPosition(0.32);
             }
 
 
@@ -127,8 +127,11 @@ public class MainTeleOp extends LinearOpMode {
 
 
             }
+            else if (gamepad2.a && gamepad2.left_bumper){
+                jointServo.setPosition(0.3);
+            }
             else if (gamepad2.a){
-                jointServo.setPosition(0.1);
+                jointServo.setPosition(0.12);
 
             }
             //CODE FOR ROCKET LAUNCHER
