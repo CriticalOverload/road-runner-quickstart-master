@@ -7,8 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
-@TeleOp(name = "Base TeleOp")
+//@TeleOp(name = "BASE TELEOP")
 public class BaseTeleOp extends LinearOpMode {
     private DcMotor motorFrontRight, motorFrontLeft, motorBackLeft, motorBackRight;
     private double powerMod;
@@ -30,6 +29,7 @@ public class BaseTeleOp extends LinearOpMode {
 
         //reverse the needed motors
         //motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
 
         motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -67,10 +67,15 @@ public class BaseTeleOp extends LinearOpMode {
 //            double powerOne = r*Math.cos(angle);
 //            double powerTwo = r*Math.sin(angle);
 
+//            motorFrontLeft.setPower((powerOne - (rotation))*powerMod);
+//            motorFrontRight.setPower((powerTwo + (rotation))*powerMod);
+//            motorBackLeft.setPower((powerTwo - (rotation))*(powerMod- 0.1));
+//            motorBackRight.setPower((powerOne + (rotation))*(powerMod-0.1));
+
             motorFrontLeft.setPower((powerOne - (rotation))*powerMod);
             motorFrontRight.setPower((powerTwo + (rotation))*powerMod);
-            motorBackLeft.setPower((powerTwo - (rotation))*(powerMod- 0.1));
-            motorBackRight.setPower((powerOne + (rotation))*(powerMod-0.1));
+            motorBackLeft.setPower((powerTwo - (rotation))*(powerMod));
+            motorBackRight.setPower((powerOne + (rotation))*(powerMod ));
 
             //moves linear accuator up and down
 //            if (gamepad2.right_trigger || ) {

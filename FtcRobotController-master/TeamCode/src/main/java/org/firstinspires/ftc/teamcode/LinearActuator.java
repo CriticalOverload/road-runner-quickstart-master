@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "LA Test TeleOp")
 public class LinearActuator extends LinearOpMode {
     private DcMotor motorFrontRight, motorFrontLeft, motorBackLeft, motorBackRight, motorLA, motorLAL;
     //private DistanceSensor distSensor;

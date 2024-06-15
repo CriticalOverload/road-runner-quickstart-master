@@ -12,11 +12,10 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="BlueRightCV")
 public class BlueRightCV extends LinearOpMode {
-    private DcMotor motorFL, motorBR, motorBL, motorFR, linearSlide;
+    private DcMotor motorFL, motorBR, motorBL, motorFR, linearSlide, slides;
+
     private Servo jointServo, clawServo ;
-    private DcMotor slides;
 
     private BNO055IMU imu;
 

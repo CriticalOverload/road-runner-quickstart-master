@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="BlueRightNOCV")
 public class BlueRightNOCV extends LinearOpMode {
     private DcMotor motorFL, motorBR, motorBL, motorFR, linearSlide;
     private Servo  jointServo, clawServo ;

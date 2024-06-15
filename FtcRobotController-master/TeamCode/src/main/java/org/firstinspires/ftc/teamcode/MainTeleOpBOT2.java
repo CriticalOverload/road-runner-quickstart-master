@@ -3,15 +3,17 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-//@TeleOp(name = "AA Main TeleOp")
-public class MainTeleOp extends LinearOpMode {
-    private DcMotor motorFrontRight, motorFrontLeft, motorBackLeft, motorBackRight, motorLS, motorLinearAccuator, motorLinearAccuatorJoint;
+@TeleOp(name = "25/7 Teleop")
+public class MainTeleOpBOT2 extends LinearOpMode {
+    private DcMotor motorFrontRight, motorFrontLeft, motorBackLeft, motorBackRight, motorLSLeft,motorLSRight, motorRoller;
     //private DistanceSensor distSensor;
+    //it declares it in the file dc motor is the variable that your modifying\
     private Servo servo, jointServo, clawServo, rocket;
     private double powerMod = 0.8;
     private double slidePMod = 1.0;
@@ -28,27 +30,29 @@ public class MainTeleOp extends LinearOpMode {
         motorBackRight = hardwareMap.dcMotor.get("BR");
         clawServo = hardwareMap.servo.get("claw");
         jointServo = hardwareMap.servo.get("JS");
-        motorLS = hardwareMap.dcMotor.get("LS");
-        motorLinearAccuator = hardwareMap.dcMotor.get("MLA");
-        motorLinearAccuatorJoint = hardwareMap.dcMotor.get("MLAJ");
+        motorLSLeft = hardwareMap.dcMotor.get("LLS");
+        motorLSRight = hardwareMap.dcMotor.get("RLS");
+        motorRoller = hardwareMap.dcMotor.get("ROLL");
         rocket = hardwareMap.servo.get("paper");
 
 
-        //distSensor = hardwareMap.get(DistanceSensor.class, "distSensor");
 
         //jointServo.setPosition(0);
 
         //reverse the needed motors
 
+        //motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
+
         motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorLS.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorLinearAccuatorJoint.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorLinearAccuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorLSLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorLSRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorRoller.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
 
         waitForStart();
@@ -59,13 +63,19 @@ public class MainTeleOp extends LinearOpMode {
 
             //Slows down or speeds up motors for wheels
             if(gamepad1.right_bumper) {
-                powerMod = 1.0;
+                powerMod = 0.8;
                 telemetry.addData("right bumper","gamepad1");
             }else if(gamepad1.left_bumper){
                 telemetry.addData("left bumper","gamepad1");
-                powerMod = 0.45;
-            }else{
-                powerMod = 0.8;
+                powerMod = 0.6;}
+            else if (gamepad1.a) {
+                powerMod = 1.0;
+                }
+            else if (gamepad1.x) {
+                powerMod = -1.0;
+            }
+            else{
+                powerMod = -0.8;
             }
 
             //slows down or speeds up motors for linear slide.
@@ -76,29 +86,25 @@ public class MainTeleOp extends LinearOpMode {
                 slidePMod = 0.45;
                 telemetry.addData("left bumper","gamepad2");
             }else{
-                slidePMod = 0.7;
+                slidePMod = 0.5;
             }
 
-            double angle = Math.atan2(gamepad1.right_stick_y, gamepad1.right_stick_x) - (Math.PI/4);
+            double angle = Math.atan2(gamepad1.right_stick_y, gamepad1.right_stick_x) - (double)(Math.PI/4);
             double r = Math.hypot(gamepad1.right_stick_x, gamepad1.right_stick_y);
-            double rotation = gamepad1.left_stick_x;
+            double rotation = gamepad1.left_stick_x * -1;//changerd this
 
-            double powerOne = r*Math.sin(angle);
-            double powerTwo = r*Math.cos(angle);
-//            double powerOne = r*Math.cos(angle);
-//            double powerTwo = r*Math.sin(angle);
+            double powerOne = (double)(r)*Math.sin(angle);
+            double powerTwo =(double)(r)*Math.cos(angle);
 
             motorFrontLeft.setPower((powerOne - (rotation))*powerMod);
             motorFrontRight.setPower((powerTwo + (rotation))*powerMod);
             motorBackLeft.setPower((powerTwo - (rotation))*(powerMod));
             motorBackRight.setPower((powerOne + (rotation))*(powerMod ));
 
+            motorLSLeft.setPower(-(gamepad2.right_stick_y) * slidePMod);
+            motorLSRight.setPower((gamepad2.right_stick_y * slidePMod));
 
-
-            motorLS.setPower(gamepad2.right_stick_y * slidePMod);
-            motorLinearAccuatorJoint.setPower(gamepad2.left_stick_x*0.3);
-            motorLinearAccuator.setPower(gamepad2.left_stick_y*-1.0);
-            //moves linear accuator up and down
+//            moves linear accuator up and down
 //            if (gamepad2.right_trigger || ) {
 //                motorLinearAccuator.setPower(0.4);
 //            }
@@ -107,7 +113,6 @@ public class MainTeleOp extends LinearOpMode {
 //            }
 //            else {
 //                motorLinearAccuator.setPower(0);
-//
 //            }
 
 
@@ -115,37 +120,46 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad2.b) {
                 //telemetry.addLine("b");
                 //clawServo.setPosition(0.7);
-                clawServo.setPosition(0.3);
+                clawServo.setPosition(0.55);
             }
             else if (gamepad2.x) {
                 //telemetry.addLine("x");
                 //clawServo.setPosition(0.32);
-                clawServo.setPosition(0.0);
+                clawServo.setPosition(0.47);
             }
 
 
-            //joint servo
+//            joint servo
             if (gamepad2.y){
-                jointServo.setPosition(0.5);
-
-
+                telemetry.addLine("y button pressed");
+                jointServo.setPosition(0.3);
             }
-            else if (gamepad2.a && gamepad2.left_bumper){
-                jointServo.setPosition(0.42);
+            else if (gamepad2.dpad_down) {
+                jointServo.setPosition(1.0);
+            }
+            else if (gamepad2.dpad_left){
+                jointServo.setPosition(1);
             }
             else if (gamepad2.a){
-                jointServo.setPosition(0.23);
+                jointServo.setPosition(0.65);
 
             }
+
+
+
             //CODE FOR ROCKET LAUNCHER
             if (gamepad2.right_trigger >0 && gamepad2.dpad_up) {
-                rocket.setPosition(0.3);
+                rocket.setPosition(0.7);
             }
             else if (gamepad2.left_trigger >0 &&  gamepad2.dpad_down) {
-                rocket.setPosition(0.5);
+                rocket.setPosition(0.0);
             }
-            telemetry.addData("Slide position",motorLS.getCurrentPosition());
-            telemetry.addData("Linear Actuator Joint position", motorLinearAccuatorJoint.getCurrentPosition());
+            else{
+                rocket.setPosition(0.7);
+            }
+            telemetry.addData("Slide position Left",motorLSLeft.getCurrentPosition());
+            telemetry.addData("Slide position Right",motorLSRight.getCurrentPosition());
+            telemetry.addData("Motor roller position", motorRoller.getCurrentPosition());
             telemetry.update();
 
 

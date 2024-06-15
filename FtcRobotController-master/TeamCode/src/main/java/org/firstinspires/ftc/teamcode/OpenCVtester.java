@@ -27,7 +27,6 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 
-@Autonomous(name="reeeeeeeeeet")
 public class OpenCVtester extends OpMode {
     OpenCvWebcam webcam1 = null;
 

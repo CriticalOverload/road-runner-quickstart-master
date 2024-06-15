@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="BlueLeftNOCV")
-public class BlueLeftNOCV extends LinearOpMode {
+public class RedLeftNOCV extends LinearOpMode {
     private DcMotor motorFL, motorBR, motorBL, motorFR, linearSlide;
     private Servo  jointServo, clawServo ;
 
@@ -51,95 +50,89 @@ public class BlueLeftNOCV extends LinearOpMode {
         //todo: test and update
         //also roadrunner...
         if (signal == 2){
-            //Setup
+            //setup
             clawServo.setPosition(0.35);
             robot.moveSlides("move", 0.6);
-            jointServo.setPosition(0.12);
+            jointServo.setPosition(0.18);
+
+            //180 turn
             robot.gyroStrafeEncoder(0.6, -93, 8);
-
-            //Turn 180
-            robot.gyroTurn(185, 0.6);
-
-            //Move towards drop and placement
-            robot.gyroStrafeEncoder(0.6, 90, 23);
+            robot.gyroTurn(180, 0.6);
+            robot.gyroStrafeEncoder(0.6, 90, 22);
+            // each zone
             clawServo.setPosition(0.7);
             sleep(1000);
             robot.moveSlides("zone", 0.3);
             clawServo.setPosition(0.35);
             sleep(1000);
-
-
             // end zone
-            robot.gyroStrafeEncoder(0.6, -90, 7);
-            robot.gyroTurn(85, 0.6);
-            robot.gyroStrafeEncoder(0.6, 87, 27);
+            robot.gyroStrafeEncoder(0.6, -90, 7.5);
+            robot.gyroTurn(-89, 0.6);
+            robot.gyroStrafeEncoder(0.6, 89, 79);
             robot.moveSlides("backboard", 0.4);
-            robot.gyroStrafeEncoder(0.6, 0, 3);
             jointServo.setPosition(0.4);
-            robot.gyroStrafeEncoder(0.3, 87, 1);
+            robot.gyroStrafeEncoder(0.3, 90, 3);
             clawServo.setPosition(0.7);
             sleep(1000);
             jointServo.setPosition(0.3);
-            robot.gyroStrafeEncoder(0.6, 270, 2);
-            jointServo.setPosition(0.12);
+            robot.gyroStrafeEncoder(0.6, 0, 1.5);
         }
-        else if (signal == 1){
-            //initial setup
-            clawServo.setPosition(0.35);
-            robot.moveSlides("move", 0.6);
-            jointServo.setPosition(0.12);
-
-            // 180
-            robot.gyroStrafeEncoder(0.6, -93, 8);
-            robot.gyroTurn(183, 0.6);
-            robot.gyroStrafeEncoder(0.6, 90, 17);
-
-            // move towards zone and drop pixel
-            robot.gyroTurn(84, 0.6);
-            robot.gyroStrafeEncoder(0.6, 90, 2);
-            clawServo.setPosition(0.7);
-            sleep(1000);
-            robot.moveSlides("zone", 0.3);
-            clawServo.setPosition(0.35);
-            sleep(1000);
-
-            // end zone
-            robot.gyroStrafeEncoder(0.6, 90, 25);
-            robot.gyroStrafeEncoder(0.6, 180, 2);
-            robot.moveSlides("backboard", 0.4);
-            jointServo.setPosition(0.4);
-            robot.gyroStrafeEncoder(0.3, 90, 2);
-            clawServo.setPosition(0.7);
-            jointServo.setPosition(0.3);
-            sleep(1000);
-            robot.gyroStrafeEncoder(0.6, 270, 3);
-        }
-
         else if (signal == 3){
             //setup
             clawServo.setPosition(0.35);
             robot.moveSlides("move", 0.6);
-            jointServo.setPosition(0.12);
-            //180 turn
+            jointServo.setPosition(0.18);
+            // 180
             robot.gyroStrafeEncoder(0.6, -93, 8);
-            robot.gyroTurn(187, 0.6);
-            //move towards zone and place pixel
-            robot.gyroStrafeEncoder(0.6, 90, 17);
-            robot.gyroTurn(-93, 0.6);
+            robot.gyroTurn(180, 0.6);
+            robot.gyroStrafeEncoder(0.6, 90, 15.5);
+            // up to zone
+            robot.gyroTurn(-90, 0.6);
             robot.gyroStrafeEncoder(0.6, 90, 7);
             clawServo.setPosition(0.7);
             sleep(1000);
             robot.moveSlides("zone", 0.3);
             clawServo.setPosition(0.35);
             sleep(1000);
-            robot.gyroStrafeEncoder(0.6, -90, 7);
-            robot.gyroTurn(189, 0.6);
             // end zone
-            robot.gyroStrafeEncoder(0.6, 90, 22);
-            robot.gyroStrafeEncoder(0.6, 0, 9);
+            robot.gyroStrafeEncoder(0.6, 90, 71);
+            robot.gyroStrafeEncoder(0.6, 0, 7);
             robot.moveSlides("backboard", 0.4);
             jointServo.setPosition(0.4);
             robot.gyroStrafeEncoder(0.3, 90, 4);
+            clawServo.setPosition(0.7);
+            sleep(1000);
+            jointServo.setPosition(0.3);
+            robot.gyroStrafeEncoder(0.6, 270, 2);
+        }
+
+        else if (signal == 1){
+            //setup
+            clawServo.setPosition(0.35);
+            robot.moveSlides("move", 0.6);
+            jointServo.setPosition(0.12);
+            // 180
+            robot.gyroStrafeEncoder(0.6, -90, 8);
+            robot.gyroTurn(180, 0.6);
+            robot.gyroStrafeEncoder(0.6, 90, 14.5);
+            // up to zone
+            robot.gyroTurn(78, 0.6);
+            robot.gyroStrafeEncoder(0.6, 90, 1.5);
+            clawServo.setPosition(0.7);
+            sleep(1000);
+            robot.moveSlides("zone", 0.3);
+            clawServo.setPosition(0.35);
+            sleep(1000);
+            robot.gyroStrafeEncoder(0.6, -90, 3);
+
+
+            // end zone
+            robot.gyroStrafeEncoder(0.6, -90, 79);
+            robot.gyroTurn(180, 0.6);
+            robot.gyroStrafeEncoder(0.6, 180, 3.5);
+            robot.moveSlides("backboard", 0.4);
+            jointServo.setPosition(0.4);
+            robot.gyroStrafeEncoder(0.3, 90, 2);
             clawServo.setPosition(0.7);
             sleep(1000);
             jointServo.setPosition(0.3);

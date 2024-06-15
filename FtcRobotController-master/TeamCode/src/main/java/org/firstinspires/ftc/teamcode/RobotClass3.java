@@ -22,10 +22,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class RobotClass3 {
 
 
-    private DcMotor motorFL, motorBR, motorBL, motorFR, motorLS;//our motor
+    private DcMotor motorFL, motorBR, motorBL, motorFR, motorLS, motorLinearAccuatorJoint, motorLSLeft,motorLSRight, motorRoller;//our motor
     private DcMotor[] motors;//beware.... uhh
     //private DcMotor viperslide;
-    private Servo claw;
+    private Servo clawServo, jointServo;
 
     //deadwheel stuff
     private DcMotor leftEncoder, rightEncoder, backEncoder;
@@ -104,6 +104,53 @@ public class RobotClass3 {
         motors = new DcMotor[]{this.motorFL, this.motorBR, this.motorBL, this.motorFR};
         this.yesDash = yesDash;
     }
+    public RobotClass3(DcMotor motorFL, DcMotor motorFR, DcMotor motorBL, DcMotor motorBR, DcMotor motorLS, DcMotor motorLinearAccuatorJoint, BNO055IMU imu, LinearOpMode opMode, boolean yesDash){
+        this.motorFL = motorFL;
+        this.motorFR = motorFR;
+        this.motorBL = motorBL;
+        this.motorBR = motorBR;
+        this.motorLS = motorLS;
+        this.motorLinearAccuatorJoint = motorLinearAccuatorJoint;
+        this.imu = imu;
+        this.opMode = opMode;
+        this.telemetry = opMode.telemetry;
+        motors = new DcMotor[]{this.motorFL, this.motorBR, this.motorBL, this.motorFR};
+        this.yesDash = yesDash;
+    }
+//    public RobotClass3(DcMotor motorFL, DcMotor motorFR, DcMotor motorBL, DcMotor motorBR, DcMotor motorLS, DcMotor motorLinearAccuatorJoint, Servo clawServo, Servo jointServo, BNO055IMU imu, LinearOpMode opMode, boolean yesDash){
+//        this.motorFL = motorFL;
+//        this.motorFR = motorFR;
+//        this.motorBL = motorBL;
+//        this.motorBR = motorBR;
+//        this.motorLS = motorLS;
+//        this.motorLinearAccuatorJoint = motorLinearAccuatorJoint;
+//        this.clawServo = clawServo;
+//        this.jointServo = jointServo;
+//        this.imu = imu;
+//        this.opMode = opMode;
+//        this.telemetry = opMode.telemetry;
+//        motors = new DcMotor[]{this.motorFL, this.motorBR, this.motorBL, this.motorFR};
+//        this.yesDash = yesDash;
+//    }
+
+
+    public RobotClass3(DcMotor motorFL, DcMotor motorFR, DcMotor motorBL, DcMotor motorBR, DcMotor motorLSRight, DcMotor motorLSLeft, Servo clawServo, Servo jointServo, BNO055IMU imu, LinearOpMode opMode, boolean yesDash){
+        this.motorFL = motorFL;
+        this.motorFR = motorFR;
+        this.motorBL = motorBL;
+        this.motorBR = motorBR;
+        this.motorLSRight = motorLSRight;
+        this.motorLSLeft = motorLSLeft;
+        this.clawServo = clawServo;
+        this.jointServo = jointServo;
+        this.imu = imu;
+        this.opMode = opMode;
+        this.telemetry = opMode.telemetry;
+        motors = new DcMotor[]{this.motorFL, this.motorBR, this.motorBL, this.motorFR};
+        this.yesDash = yesDash;
+    }
+
+
     public void setupRobot() throws InterruptedException{
         reverseMotors();
         for(DcMotor m : motors){
@@ -211,24 +258,65 @@ public class RobotClass3 {
         switch(level){//todo!!!!!!!!!!!!!!!!!!!!!
             default:
             case "backboard":
-                target = -1990;
+                target = 930;
                 break;
             case "move":
-                target = -100;
+                target = 50;
                 break;
+
             case "zone":
-                target = -270;
+                target = 180;
+                break;
+            case "final":
+                target = 1000;
+                break;
+            case "backboard2":
+                target = 3950;
                 break;
         }
-        if(motorLS.getCurrentPosition() < target) {
-            motorLS.setPower(power);
+        if(motorLSRight.getCurrentPosition() < target && motorLSLeft.getCurrentPosition() < target) {
+            motorLSLeft.setPower(power);
+            motorLSRight.setPower(-power);
         }
         else{
-            motorLS.setPower(-power);
+            motorLSLeft.setPower(-power);
+            motorLSRight.setPower(power);
+
         }
-        motorLS.setTargetPosition(target);
+        motorLSRight.setTargetPosition(-target);
+        motorLSLeft.setTargetPosition(target);
         //while((!stopButton.isPressed())&&(Math.abs(motorLS.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
-        while((Math.abs(motorLS.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
+        while((Math.abs(motorLSLeft.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
+        motorLSRight.setPower(0);
+        motorLSLeft.setPower(0);
+
+
+
+    }
+    public void moveMLAJ(String level, double power){
+        double circumference = 4.409;//circumference of pulley for hub
+//        double groundRN = ; // rotations needed to reach point from 0
+//        double smallRN =;
+        double medRN =26/circumference;
+        double highEP =37/circumference;// (inches from ground / circumference)* ticks
+
+        //setup this with pid stuff
+        int target;
+        switch(level){//todo!!!!!!!!!!!!!!!!!!!!!
+            default:
+            case "down":
+                target = -221;
+                break;
+        }
+        if(motorLinearAccuatorJoint.getCurrentPosition() < target) {
+            motorLinearAccuatorJoint.setPower(power);
+        }
+        else{
+            motorLinearAccuatorJoint.setPower(-power);
+        }
+        motorLinearAccuatorJoint.setTargetPosition(target);
+        //while((!stopButton.isPressed())&&(Math.abs(motorLS.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
+        while((Math.abs(motorLinearAccuatorJoint.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
         motorLS.setPower(0);
 
 
@@ -320,6 +408,16 @@ public class RobotClass3 {
             return -angle*0.02;//gain;<<<< make var?? todo do we even need gain?
         }
     }
+    private void slideStay(boolean slideOn) throws InterruptedException{
+        if (slideOn){
+            motorLSLeft.setPower(0.1);
+            motorLSRight.setPower(-0.1);
+        }
+        else{
+            motorLSLeft.setPower(0.0);
+            motorLSRight.setPower(0.0);
+        }
+    }
     public void gyroStrafeEncoder(double power, double angle, double in) throws InterruptedException{
         double ticks = in * TICKS_PER_IN;
 
@@ -347,6 +445,455 @@ public class RobotClass3 {
         resetAngle();
         resetEncoders();
     }
+    public void spike_blue_one() throws InterruptedException{
+        //goes into placement
+        //turns then goes into placement
+        gyroTurn(-90,0.4);
+        gyroStrafeEncoder(0.6, -90, 15);
+        gyroStrafeEncoder(0.6, 90, 4);
+        openClaw();
+        closeClaw();
+
+        //Goes backward for the 180 turn
+
+
+
+    }
+    public void spike_blue_two() throws InterruptedException{
+        //goes into placement
+        gyroTurn(177,0.4);
+        gyroStrafeEncoder(0.6, -90, 13);
+        gyroStrafeEncoder(0.6, 90, 7);
+        openClaw();
+        closeClaw();
+        gyroStrafeEncoder(0.6, 90, 4);
+        gyroTurn(90,0.4);
+
+
+
+    }
+
+    public void spike_blue_three() throws InterruptedException{
+
+        gyroTurn(177,0.4);
+        gyroStrafeEncoder(0.6, -90, 13);
+        gyroStrafeEncoder(0.6, 90, 9);
+        openClaw();
+        closeClaw();
+        gyroStrafeEncoder(0.6, 90, 8);
+        gyroTurn(90, 0.4);
+
+
+
+    }
+
+    public void spike_red_one() throws InterruptedException{
+        //goes into placement
+        gyroTurn(177,0.4);
+        gyroStrafeEncoder(0.6, -90, 13);
+        gyroStrafeEncoder(0.6, 90, 9);
+        openClaw();
+        closeClaw();
+        gyroStrafeEncoder(0.6, 90, 7);
+        gyroTurn(-87, 0.4);
+
+
+
+    }
+    public void spike_red_two() throws InterruptedException{
+        //goes into placement
+        gyroTurn(177,0.4);
+        gyroStrafeEncoder(0.6, -90, 13);
+        gyroStrafeEncoder(0.6, 90, 7);
+        openClaw();
+        closeClaw();
+        gyroStrafeEncoder(0.6, 90, 4);
+        gyroTurn(-87,0.4);
+
+
+
+    }
+
+    public void spike_red_three() throws InterruptedException{
+
+        //turns then goes into placement
+        gyroTurn(-90,0.4);
+        gyroStrafeEncoder(0.6, -90, 15);
+        gyroStrafeEncoder(0.6, 90, 4);
+        openClaw();
+        closeClaw();
+
+        //Goes backward for the 180 turn
+        gyroStrafeEncoder(0.6, 90, 20);
+        gyroTurn(180,0.4);
+
+
+    }
+
+    public void spike_set_place(int signal, boolean blue) throws InterruptedException{
+        if(blue) {
+            closeClaw();
+            //Turn 180
+            //gyroTurn(180, 0.4);
+
+            //Move towards drop and placement
+            if (signal == 1) {
+                moveSlides("move", 0.4);
+                gyroStrafeEncoder(0.6, 90, 25);
+                moveSlides("zone", 0.4);
+
+                spike_blue_one();
+                //backDropPlace(1);
+            } else if (signal == 2) {
+                moveSlides("move", 0.4);
+                gyroStrafeEncoder(0.6, 90, 25);
+                moveSlides("zone", 0.4);
+                spike_blue_two();
+                //backDropPlace(2);
+            } else if (signal == 3) {
+                moveSlides("move", 0.4);
+                gyroStrafeEncoder(0.6, 0, 10);
+                gyroStrafeEncoder(0.6, 90, 25);
+                moveSlides("zone", 0.4);
+                spike_blue_three();
+                //backDropPlace(3);
+
+            }
+        }
+        else{
+            //REEEED
+            //RED HERE RED
+            closeClaw();
+            //Turn 180
+            //gyroTurn(180, 0.4);
+
+            //Move towards drop and placement
+            if (signal == 1) {
+                moveSlides("move", 0.4);
+                gyroStrafeEncoder(0.6, 0, 8);
+                gyroStrafeEncoder(0.6, 90, 25);
+                moveSlides("zone", 0.4);
+                spike_red_one();
+                //backDropPlace(3);
+
+                //backDropPlace(1);
+            } else if (signal == 2) {
+                moveSlides("move", 0.4);
+                gyroStrafeEncoder(0.6, 90, 25);
+                moveSlides("zone", 0.4);
+                spike_red_two();
+                //backDropPlace(2);
+            } else if (signal == 3) {
+                moveSlides("move", 0.4);
+                gyroStrafeEncoder(0.6, 90, 25);
+                moveSlides("zone", 0.4);
+
+                spike_red_three();
+            }
+
+        }
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    ///SPLITT
+
+    public void blue_one() throws InterruptedException{
+        //goes into placement
+
+        gyroTurn(177,0.4);
+        gyroStrafeEncoder(0.6, -90, 13);
+        gyroStrafeEncoder(0.6, 90, 15);
+        openClaw();
+        closeClaw();
+
+        gyroStrafeEncoder(0.6, 90, 8);
+        gyroTurn(90, 0.4);
+
+        //towards backboard
+        gyroStrafeEncoder(0.6, -90, 17);
+        slideStay(false);
+        moveSlides("backboard",0.4);
+        slideStay(true);
+        uppie();
+        gyroStrafeEncoder(0.4, -90, 3);
+        openClaw();
+        gyroStrafeEncoder(0.4, 90, 4);
+        ballset();
+
+    }
+    public void blue_two() throws InterruptedException{
+        //goes into placement
+
+        gyroTurn(177,0.4);
+        gyroStrafeEncoder(0.6, -90, 13);
+        gyroStrafeEncoder(0.6, 90, 7);
+        openClaw();
+        closeClaw();
+
+        gyroStrafeEncoder(0.6, 90, 8);
+        gyroTurn(90,0.4);
+
+        //placement for backboard
+        gyroStrafeEncoder(0.6, -90, 26);
+        slideStay(false);
+        moveSlides("backboard",0.4);
+        slideStay(true);
+        uppie();
+        gyroStrafeEncoder(0.4, -90, 1);
+        openClaw();
+        gyroStrafeEncoder(0.4, 90, 4);
+        ballset();
+
+    }
+
+    public void blue_three() throws InterruptedException{
+
+        //turns then goes into placement
+        gyroTurn(90,0.4);
+        gyroStrafeEncoder(0.6, -90, 15);
+        gyroStrafeEncoder(0.6, 90, 3);
+        openClaw();
+        closeClaw();
+
+
+        //Goes backward for the 180 turn
+        gyroStrafeEncoder(0.6, 90, 20);
+        gyroTurn(180,0.4);
+
+        //towards placement on backboard
+        gyroStrafeEncoder(0.6,180,9);
+        gyroStrafeEncoder(0.6, -90, 13);
+        slideStay(false);
+        moveSlides("backboard",0.4);
+        slideStay(true);
+        uppie();
+        gyroStrafeEncoder(0.4, -90, 2.5);
+        openClaw();
+        gyroStrafeEncoder(0.4, 90, 4);
+        ballset();
+
+    }
+
+    public void red_one() throws InterruptedException{
+        //turns then goes into placement
+
+
+        gyroTurn(-90,0.4);
+        gyroStrafeEncoder(0.6, -90, 15);
+        gyroStrafeEncoder(0.6, 90, 8);
+        openClaw();
+        closeClaw();
+
+        //Goes backward for the 180 turn
+        gyroStrafeEncoder(0.6, 90, 20);
+        gyroTurn(180,0.4);
+
+        //towards placement on backboard
+        gyroStrafeEncoder(0.6, -90, 11);
+        gyroStrafeEncoder(0.6,0,8);
+        slideStay(false);
+
+        moveSlides("backboard",0.4);
+        slideStay(true);
+
+
+        uppie();
+        gyroStrafeEncoder(0.4, -90, 1);
+        openClaw();
+        gyroStrafeEncoder(0.4, 90, 4);
+        ballset();
+
+    }
+    public void red_two() throws InterruptedException{
+        //goes into placement
+        gyroTurn(177,0.4);
+        gyroStrafeEncoder(0.6, -90, 13);
+        gyroStrafeEncoder(0.6, 90, 10);
+        openClaw();
+        closeClaw();
+        gyroStrafeEncoder(0.6, 90, 4);
+        gyroTurn(-87,0.4);
+
+        //placement for backboard
+        gyroStrafeEncoder(0.6, -90, 29);
+        slideStay(false);
+        moveSlides("backboard",0.4);
+        slideStay(true);
+        uppie();
+        gyroStrafeEncoder(0.4, -90, 2);
+        openClaw();
+        gyroStrafeEncoder(0.4, 90, 4);
+        ballset();
+
+    }
+
+    public void red_three() throws InterruptedException{
+        //goes into placement
+        gyroTurn(177,0.4);
+        gyroStrafeEncoder(0.6, -90, 13);
+        gyroStrafeEncoder(0.6, 90, 9);
+        openClaw();
+        closeClaw();
+        gyroStrafeEncoder(0.6, 90, 7);
+        gyroTurn(-87, 0.4);
+
+        //towards backboard
+        gyroStrafeEncoder(0.6, -90, 17);
+        slideStay(false);
+        moveSlides("backboard",0.4);
+        slideStay(true);
+        uppie();
+        gyroStrafeEncoder(0.4, -90, 3);
+        openClaw();
+        gyroStrafeEncoder(0.4, 90, 4);
+        ballset();
+
+    }
+    public void set_place(int signal, boolean blue) throws InterruptedException{
+            if(blue) {
+                closeClaw();
+                //Turn 180
+                //gyroTurn(180, 0.4);
+
+                //Move towards drop and placement
+                if (signal == 1) {
+                    moveSlides("move", 0.4);
+                    gyroStrafeEncoder(0.6, 180, 8);
+                    gyroStrafeEncoder(0.6, 90, 25);
+                    moveSlides("zone", 0.4);
+                    blue_one();
+                    //backDropPlace(1);
+                } else if (signal == 2) {
+                    moveSlides("move", 0.4);
+                    gyroStrafeEncoder(0.6, 90, 25);
+                    moveSlides("zone", 0.4);
+                    blue_two();
+                    //backDropPlace(2);
+                } else if (signal == 3) {
+                    moveSlides("move", 0.4);
+                    gyroStrafeEncoder(0.6, 90, 23);
+                    moveSlides("zone", 0.4);
+                    blue_three();
+                    //backDropPlace(3);
+
+                }
+            }
+            else{
+                //REEEED
+                //RED HERE RED
+                closeClaw();
+                //Turn 180
+                //gyroTurn(180, 0.4);
+
+                //Move towards drop and placement
+                if (signal == 1) {
+                    moveSlides("move", 0.4);
+                    gyroStrafeEncoder(0.6, 90, 25);
+                    moveSlides("zone", 0.4);
+                    red_one();
+                    //backDropPlace(3);
+
+                    //backDropPlace(1);
+                } else if (signal == 2) {
+                    moveSlides("move", 0.4);
+                    gyroStrafeEncoder(0.6, 90, 25);
+                    moveSlides("zone", 0.4);
+                    red_two();
+                    //backDropPlace(2);
+                } else if (signal == 3) {
+                    moveSlides("move", 0.4);
+                    gyroStrafeEncoder(0.6, 0, 8);
+                    gyroStrafeEncoder(0.6, 90, 25);
+                    moveSlides("zone", 0.4);
+                    red_three();
+                }
+
+            }
+
+
+
+
+    }
+
+    public void closeClaw() throws InterruptedException {
+        clawServo.setPosition(0.47);
+        sleep(1000);
+    }
+    public void openClaw() throws InterruptedException {
+        clawServo.setPosition(0.55);
+        sleep(1000);
+    }
+
+    public void uppie() throws InterruptedException {
+        jointServo.setPosition(0.3);
+        sleep(1000);
+    }
+
+    public void downServo() throws InterruptedException {
+        jointServo.setPosition(0.65);
+        sleep(1000);
+    }
+
+    public void ballset() throws InterruptedException {
+    downServo();
+    closeClaw();
+    moveSlides("move",0.4);
+    }
+
+    public void BlueRightPlace(int signal) throws InterruptedException{
+            if (signal == 1) {
+                gyroStrafeEncoder(0.8, 90, 68);//6 inch difference
+
+            } else if (signal == 2) {
+                gyroStrafeEncoder(0.8, -90, 2.5);
+                gyroTurn(90, 0.4);
+                gyroStrafeEncoder(0.8, 90, 74);
+
+            } else if (signal == 3) {
+                gyroTurn(180, 0.4);
+                gyroStrafeEncoder(0.8, 90, 80);
+
+            }
+        }
+
+        // backdrop drop
+        // signal 1 - 180
+        // signal 2 - 90
+        // signal 3 - 0
+
+        public void backDropPlace(int signal) throws InterruptedException{
+            if (signal == 1){
+                gyroStrafeEncoder(0.4, -90, 4);
+                gyroTurn(180, 0.4);
+                gyroStrafeEncoder(0.4,  90, 23);
+            }
+            else if (signal == 2){
+                gyroStrafeEncoder(0.4, -90, 4);
+                gyroTurn(90, 0.4);
+                gyroStrafeEncoder(0.4,  90, 23);
+            }
+            else if (signal == 3){
+                gyroStrafeEncoder(0.4, -90, 4);
+                gyroStrafeEncoder(0.4,  90, 23);
+            }
+        }
+
+
+
 
 
 }

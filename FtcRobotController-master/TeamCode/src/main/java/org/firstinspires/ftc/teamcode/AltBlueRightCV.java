@@ -12,9 +12,9 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="BlueLeftCV")
-public class BlueLeftCV extends LinearOpMode {
-    private DcMotor motorFL, motorBR, motorBL, motorFR, linearSlide;
+//@Autonomous(name="AltBlueRightCV")
+public class AltBlueRightCV extends LinearOpMode {
+    private DcMotor motorFL, motorBR, motorBL, motorFR, linearSlide, motorLinearAccuatorJoint;
     private Servo jointServo, clawServo ;
     private DcMotor slides;
 
@@ -38,13 +38,15 @@ public class BlueLeftCV extends LinearOpMode {
         clawServo = hardwareMap.servo.get("claw");
         jointServo = hardwareMap.servo.get("JS");
         linearSlide = hardwareMap.dcMotor.get("LS");
+        motorLinearAccuatorJoint = hardwareMap.dcMotor.get("MLAJ");
+
         //slides = hardwareMap.dcMotor.get("LS");
         // signal = 2;
 
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        robot = new RobotClass3(motorFL, motorFR, motorBL, motorBR, imu, this, false);
+        robot = new RobotClass3(motorFL, motorFR, motorBL, motorBR, linearSlide, motorLinearAccuatorJoint, imu, this, false);
         robot.setupRobot();
 
 //        int camViewID = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -94,14 +96,16 @@ public class BlueLeftCV extends LinearOpMode {
             //Setup
             clawServo.setPosition(0.35);
             robot.moveSlides("move", 0.6);
-            jointServo.setPosition(0.12);
-            robot.gyroStrafeEncoder(0.6, -93, 8);
+            robot.moveMLAJ("down", 0.4);
+            jointServo.setPosition(0.23);
+            robot.gyroStrafeEncoder(0.6, -90, 8);
 
             //Turn 180
-            robot.gyroTurn(185, 0.6);
+            robot.gyroTurn(180, 0.4);
 
             //Move towards drop and placement
-            robot.gyroStrafeEncoder(0.6, 90, 23);
+            robot.gyroStrafeEncoder(0.6, 90, 29);
+            robot.gyroStrafeEncoder(0.6, -90, 7);
             clawServo.setPosition(0.7);
             sleep(1000);
             robot.moveSlides("zone", 0.3);
@@ -109,67 +113,105 @@ public class BlueLeftCV extends LinearOpMode {
             sleep(1000);
 
 
-            // end zone
-            robot.gyroStrafeEncoder(0.6, -90, 7);
-            robot.gyroTurn(94, 0.6);
-            robot.gyroStrafeEncoder(0.6, 89, 32);
-            robot.moveSlides("backboard", 0.4);
-            jointServo.setPosition(0.4);
-            robot.gyroStrafeEncoder(0.3, 90, 1);
-            clawServo.setPosition(0.7);
-            sleep(1000);
-            jointServo.setPosition(0.12);
-            robot.gyroStrafeEncoder(0.6, 270, 2);
+//            // end zone
+//            robot.gyroStrafeEncoder(0.6, -90, 6);
+//            robot.gyroTurn(90, 0.4);
+//            robot.gyroStrafeEncoder(0.6, 90, 27);
+//            robot.gyroTurn(-5, 0.4);
+//            robot.moveSlides("backboard", 0.4);
+//            //robot.gyroStrafeEncoder(0.6, 0, 3);
+//            jointServo.setPosition(0.5);
+//            robot.gyroStrafeEncoder(0.3, 90, 80);
+//            clawServo.setPosition(0.7);
+//            sleep(1000);
+//            jointServo.setPosition(0.42);
+//            robot.gyroStrafeEncoder(0.6, 270, 2);
+//
+//            jointServo.setPosition(0.23);
+//            clawServo.setPosition(0.32);
+//            robot.moveSlides("final", 0.4);
+//            robot.gyroStrafeEncoder(0.6, 0, 24);
+//            robot.gyroStrafeEncoder(0.6, 90, 12);
+
+
+
+            //garage
         }
         else if (signal == 1){
             clawServo.setPosition(0.35);
             robot.moveSlides("move", 0.6);
-            jointServo.setPosition(0.12);
-            robot.gyroStrafeEncoder(0.6, -93, 8);
-            robot.gyroTurn(183, 0.6);
-            robot.gyroStrafeEncoder(0.6, 90, 17);
-            robot.gyroTurn(87, 0.6);
-            robot.gyroStrafeEncoder(0.6, 90, 7);
-            clawServo.setPosition(0.7);
-            sleep(1000);
-            robot.moveSlides("zone", 0.3);
-            clawServo.setPosition(0.35);
-            sleep(1000);
-            // end zone
-            robot.gyroStrafeEncoder(0.6, 90, 71);
-            robot.gyroStrafeEncoder(0.6, 180, 3);
-            robot.moveSlides("backboard", 0.4);
-            jointServo.setPosition(0.4);
-            robot.gyroStrafeEncoder(0.3, 90, 4);
-            clawServo.setPosition(0.7);
-            sleep(1000);
-            robot.gyroStrafeEncoder(0.6, 270, 2);
-        }
+            robot.moveMLAJ("down", 0.4);
+            jointServo.setPosition(0.23);
 
-        else if (signal == 3){
-            clawServo.setPosition(0.35);
-            robot.moveSlides("move", 0.6);
-            jointServo.setPosition(0.12);
-            robot.gyroStrafeEncoder(0.6, -93, 8);
-            robot.gyroTurn(187, 0.6);
-            robot.gyroStrafeEncoder(0.6, 90, 17);
-            robot.gyroTurn(-93, 0.6);
+            // 180
+            robot.gyroStrafeEncoder(0.6, -90, 8);
+            robot.gyroTurn(180, 0.4);
+            robot.gyroStrafeEncoder(0.6, 90, 29);
+
+            // move towards zone and drop pixel
+            robot.gyroStrafeEncoder(0.6, -90, 6);
+            robot.gyroTurn(92, 0.4);
             robot.gyroStrafeEncoder(0.6, 90, 2);
             clawServo.setPosition(0.7);
             sleep(1000);
             robot.moveSlides("zone", 0.3);
             clawServo.setPosition(0.35);
             sleep(1000);
-            robot.gyroTurn(189, 0.6);
+
             // end zone
-            robot.gyroStrafeEncoder(0.6, 90, 79);
-            robot.gyroStrafeEncoder(0.6, 0, 3);
-            robot.moveSlides("backboard", 0.4);
-            jointServo.setPosition(0.4);
-            robot.gyroStrafeEncoder(0.3, 90, 4);
+//            robot.gyroStrafeEncoder(0.6, 90, 80);
+//            robot.gyroStrafeEncoder(0.6, 180, 13);
+//            robot.moveSlides("backboard", 0.4);
+//            jointServo.setPosition(0.5);
+//            robot.gyroStrafeEncoder(0.3, 90, 2);
+//            clawServo.setPosition(0.7);
+//            sleep(1000);
+//            jointServo.setPosition(0.42);
+//            robot.gyroStrafeEncoder(0.6, 270, 3);
+//
+//            jointServo.setPosition(0.23);
+//            clawServo.setPosition(0.32);
+//            robot.moveSlides("final", 0.4);
+//            robot.gyroStrafeEncoder(0.6, 0, 31);
+//            robot.gyroStrafeEncoder(0.6, 90, 12);
+
+        }
+
+        else if (signal == 3){
+            //setup
+            clawServo.setPosition(0.35);
+            robot.moveSlides("move", 0.6);
+            robot.moveMLAJ("down", 0.4);
+            jointServo.setPosition(0.23);
+            //180 turn
+            robot.gyroStrafeEncoder(0.6, -90, 8);
+            robot.gyroTurn(180, 0.4);
+            //move towards zone and place pixel
+            robot.gyroStrafeEncoder(0.6, 90, 16);
+            robot.gyroTurn(-90, 0.4);
+            robot.gyroStrafeEncoder(0.6, 90, 3);
             clawServo.setPosition(0.7);
             sleep(1000);
-            robot.gyroStrafeEncoder(0.6, 270, 2);
+            robot.moveSlides("zone", 0.3);
+            clawServo.setPosition(0.35);
+            sleep(1000);
+
+//            // end zone
+//            robot.gyroStrafeEncoder(0.6, 90, 80);
+//            //robot.gyroStrafeEncoder(0.6, 0, 7);
+//            robot.moveSlides("backboard", 0.4);
+//            jointServo.setPosition(0.5);
+//            robot.gyroStrafeEncoder(0.3, 90, 5);
+//            clawServo.setPosition(0.7);
+//            sleep(1000);
+//            jointServo.setPosition(0.42);
+//            robot.gyroStrafeEncoder(0.6, 270, 2);
+//            jointServo.setPosition(0.23);
+//            clawServo.setPosition(0.32);
+//            robot.moveSlides("final", 0.4);
+//            robot.gyroStrafeEncoder(0.6, 0, 17);
+//            robot.gyroStrafeEncoder(0.6, 90, 12);
+
 
         }
 

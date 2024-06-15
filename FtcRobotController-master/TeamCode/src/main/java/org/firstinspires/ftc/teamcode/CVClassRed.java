@@ -61,7 +61,7 @@ public class CVClassRed extends OpenCvPipeline{
 
             signal = 3;
 //            telemetry.addData("this is numero tres", signal  );
-//            telemetry.update();
+////            telemetry.update();
 //            telemetry.addLine("mid: " + middleavgfin);
 //            telemetry.addLine("right:" + rightavgfin);
 //            telemetry.addLine("left: " + leftavgfin);
@@ -70,8 +70,8 @@ public class CVClassRed extends OpenCvPipeline{
         } else if ((rightavgfin < middleavgfin) && (middleavgfin > leftavgfin)) {
             signal = 2;
 //            telemetry.addData("this is numero dos", signal);
-//            telemetry.update();
-            //telemetry.addLine("mid: " + middleavgfin);
+////            telemetry.update();
+//            telemetry.addLine("mid: " + middleavgfin);
 //            telemetry.addLine("right:" + rightavgfin);
 //            telemetry.addLine("left: " + leftavgfin);
         }
@@ -89,11 +89,11 @@ public class CVClassRed extends OpenCvPipeline{
 //            }
         else {
             signal = 1;
-            //telemetry.addLine("signal");
-            //telemetry.addData("this is numero uno", signal);
-            //telemetry.addLine("mid: " + middleavgfin);
-            //telemetry.addLine("right:" + rightavgfin);
-            //telemetry.addLine("left: " + leftavgfin);
+//            telemetry.addLine("signal");
+//            telemetry.addData("this is numero uno", signal);
+//            telemetry.addLine("mid: " + middleavgfin);
+//            telemetry.addLine("right:" + rightavgfin);
+//            telemetry.addLine("left: " + leftavgfin);
         }
         return (outPut);
 
