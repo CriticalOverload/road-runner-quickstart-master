@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,12 +9,10 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "teleopPrac")
 public class MainTeleOpBOT3 extends LinearOpMode {
     private DcMotor motorFrontRight, motorBackLeft, motorFrontLeft, motorBackRight, motorLS;
     private double powerMod;
     private double slidePMod = 1.0;
-    private double *
     @Override
     public void runOpMode() throws InterruptedException {
         motorFrontRight = hardwareMap.dcMotor.get("FR");

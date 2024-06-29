@@ -22,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class RobotClass3 {
 
 
-    private DcMotor motorFL, motorBR, motorBL, motorFR, motorLS, motorLinearAccuatorJoint, motorLSLeft,motorLSRight, motorRoller;//our motor
+    private DcMotor bob, motorFL, motorBR, motorBL, motorFR, motorLS, motorLinearAccuatorJoint, motorLSLeft,motorLSRight, motorRoller;//our motor
     private DcMotor[] motors;//beware.... uhh
     //private DcMotor viperslide;
     private Servo clawServo, jointServo;
@@ -91,6 +91,13 @@ public class RobotClass3 {
         this.telemetry = opMode.telemetry;
         motors = new DcMotor[]{this.motorFL, this.motorBR, this.motorBL, this.motorFR};
         this.yesDash = yesDash;
+    }
+    public RobotClass3(DcMotor motorFL, DcMotor motorFR, DcMotor motorBL, DcMotor motorBR, DcMotor bob){
+        this.motorFL = motorFL;
+        this.motorFR = motorFR;
+        this.motorBL = motorBL;
+        this.motorBR = motorBR;
+        this.bob = bob;
     }
     public RobotClass3(DcMotor motorFL, DcMotor motorFR, DcMotor motorBL, DcMotor motorBR, DcMotor motorLS, BNO055IMU imu, LinearOpMode opMode, boolean yesDash){
         this.motorFL = motorFL;
@@ -289,6 +296,34 @@ public class RobotClass3 {
         while((Math.abs(motorLSLeft.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
         motorLSRight.setPower(0);
         motorLSLeft.setPower(0);
+
+
+
+    }
+    public void moveBob(String level, double power){
+        //setup this with pid stuff
+        int target;
+        switch(level){//todo!!!!!!!!!!!!!!!!!!!!!
+            default:
+            case "1turn":
+                target = 930;
+                break;
+            case "2turn":
+                target = 1900;
+                break;
+
+        }
+        if(bob.getCurrentPosition() < target) {
+            bob.setPower(power);
+        }
+        else{
+            bob.setPower(power);
+
+        }
+        bob.setTargetPosition(target);
+
+        while((Math.abs(bob.getCurrentPosition() - target) > 5 && opMode.opModeIsActive()));
+        bob.setPower(0);
 
 
 

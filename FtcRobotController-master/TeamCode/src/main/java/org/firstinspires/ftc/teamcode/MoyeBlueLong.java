@@ -12,7 +12,6 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="MoyBlueLong")
 public class MoyeBlueLong extends LinearOpMode {
     private DcMotor motorFrontRight, motorFrontLeft, motorBackLeft, motorBackRight, motorLSLeft,motorLSRight, motorRoller;
     //private DistanceSensor distSensor;
