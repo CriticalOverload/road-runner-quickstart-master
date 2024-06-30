@@ -317,7 +317,7 @@ public class RobotClass3 {
             bob.setPower(power);
         }
         else{
-            bob.setPower(power);
+            bob.setPower(0);
 
         }
         bob.setTargetPosition(target);
