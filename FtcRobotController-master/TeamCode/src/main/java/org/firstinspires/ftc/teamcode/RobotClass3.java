@@ -926,9 +926,26 @@ public class RobotClass3 {
                 gyroStrafeEncoder(0.4,  90, 23);
             }
         }
+        public void skibatry() throws InterruptedException{
+            gyroStrafeEncoder(0.4,90,4);
+            gyroTurn(-90,0.4);
+            telemetry.addLine("skibidi");
+            gyroStrafeEncoder(0.4,90,4);
+            gyroTurn(270,0.4);
+            telemetry.addLine("skiba2");
+            gyroStrafeEncoder(0.4,90,4);
+            gyroTurn(270,0.4);
+            telemetry.addLine("skiba3")
+            gyroStrafeEncoder(0.4,90,4);
+        }
 
-
-
+        public void turnSquare() throws InterruptedException{
+            for (int turn = 1; turn<=4;turn++){
+                gyroStrafeEncoder(0.4, 90, 4);
+                gyroTurn(-90,0.4);
+                telemetry.addData("Turn: ", turn);
+            }
+        }
 
 
 }

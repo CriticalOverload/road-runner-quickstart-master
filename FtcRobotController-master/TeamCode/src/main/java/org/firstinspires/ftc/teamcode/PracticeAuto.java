@@ -33,7 +33,7 @@ public class PracticeAuto extends LinearOpMode {
         motorFL = hardwareMap.dcMotor.get("FL");
         motorBL = hardwareMap.dcMotor.get("BL");
 
-        robot = new RobotClass3( motorFL,  motorFR,  motorBL,  motorBR,imu, this, false);
+        robot = new RobotClass3( motorFL,  motorFR,  motorBL,  motorBR, imu, this, false);
         robot.setupRobot();
 
         waitForStart();
@@ -47,7 +47,11 @@ public class PracticeAuto extends LinearOpMode {
         robot.gyroTurn(180, 0.8);
         robot.gyroStrafeEncoder(0.3,90,100);
         robot.gyroTurn(180,0.4);
+        //sigma lines
+
 
 
     }
+
+
 }
