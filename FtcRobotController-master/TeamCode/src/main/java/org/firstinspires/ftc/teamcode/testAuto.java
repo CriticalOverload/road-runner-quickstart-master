@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCapt
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+@Autonomous(name = "Practice AUTO")
 
 public class testAuto extends LinearOpMode {
     private DcMotor motorFL, motorBR, motorBL, motorFR;
@@ -31,13 +32,13 @@ public class testAuto extends LinearOpMode {
         motorBR = hardwareMap.dcMotor.get("BR");
         motorFL = hardwareMap.dcMotor.get("FL");
         motorBL = hardwareMap.dcMotor.get("BL");
-        //slides = hardwareMap.dcMotor.get("LS");
+        slides = hardwareMap.dcMotor.get("LS");
         // signal = 2;
 
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu = hardwareMap.get(BNO055IMU.class, "imu 1");
 
-        robot = new RobotClass3(motorFL, motorFR, motorBL, motorBR, imu, this, false);
+        robot = new RobotClass3(motorFL, motorFR, motorBL, motorBR,slides, imu, this, false);
         robot.setupRobot();
 
         while(!opModeIsActive()){
@@ -50,12 +51,21 @@ public class testAuto extends LinearOpMode {
         //todo: test and update
         //also roadrunner...
 
+        /*
         robot.gyroStrafeEncoder(0.7, 90, 24);
         robot.gyroTurn(90, 0.5);
         robot.gyroStrafeEncoder(0.7, 90, 24);
         robot.gyroStrafeEncoder(0.5, 24, -90);
         robot.gyroTurn(-90, 0.5);
-
+        */
+        //robot.skibatry();
+        /*robot.gyroStrafeEncoder(0.7,90,45);
+        robot.gyroTurn(80,0.7);
+        robot.gyroStrafeEncoder(0.7,90,20);
+        robot.gyroTurn(-90,0.4);
+        robot.gyroStrafeEncoder(0.7,90,48);
+        telemetry.addLine("turn 1");*/
+        robot.skibiSLide(2,0.4);
 
     }
 }

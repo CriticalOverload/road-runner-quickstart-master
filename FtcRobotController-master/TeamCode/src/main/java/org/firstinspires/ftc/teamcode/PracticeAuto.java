@@ -14,7 +14,6 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
-@Autonomous(name = "Practice AUTO")
 public class PracticeAuto extends LinearOpMode {
   //  private DcMotor bob;
     private RobotClass3 robot;

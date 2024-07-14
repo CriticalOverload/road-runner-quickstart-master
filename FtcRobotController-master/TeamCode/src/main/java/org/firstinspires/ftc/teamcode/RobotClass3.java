@@ -221,7 +221,7 @@ public class RobotClass3 {
         motorBL.setDirection(DcMotor.Direction.REVERSE);
         //motorFR.setDirection(DcMotor.Direction.REVERSE);
         motorFL.setDirection(DcMotor.Direction.REVERSE);
-        motorBL.setDirection(DcMotor.Direction.REVERSE);
+        //motorBL.setDirection(DcMotor.Direction.REVERSE);
     }
     public void resetEncoders(){
         for(DcMotor m : motors) {
@@ -299,6 +299,27 @@ public class RobotClass3 {
 
 
 
+    }
+
+    public void skibiSLide(int level, double power) {
+        int target;
+        if (level == 2) {
+            target = 200;
+        } else if (level == 4) {
+            target = 400;
+        } else{
+            target= 600;
+        }
+
+        if(motorLS.getCurrentPosition() < target){
+            motorLS.setPower(power);
+        }
+        else if (motorLS.getCurrentPosition()> target) {
+            motorLS.setPower(power);
+        }
+        else if (Math.abs(motorLS.getCurrentPosition()-target)<=5 ) {
+            motorLS.setPower(0);
+        }
     }
     public void moveBob(String level, double power){
         //setup this with pid stuff
@@ -927,16 +948,13 @@ public class RobotClass3 {
             }
         }
         public void skibatry() throws InterruptedException{
-            gyroStrafeEncoder(0.4,90,4);
+            gyroStrafeEncoder(0.7,90,45);
+            gyroTurn(80,0.7);
+            gyroStrafeEncoder(0.7,90,20);
             gyroTurn(-90,0.4);
-            telemetry.addLine("skibidi");
-            gyroStrafeEncoder(0.4,90,4);
-            gyroTurn(270,0.4);
-            telemetry.addLine("skiba2");
-            gyroStrafeEncoder(0.4,90,4);
-            gyroTurn(270,0.4);
-            telemetry.addLine("skiba3")
-            gyroStrafeEncoder(0.4,90,4);
+            gyroStrafeEncoder(0.7,90,48);
+            telemetry.addLine("turn 1");
+
         }
 
         public void turnSquare() throws InterruptedException{
